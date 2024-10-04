@@ -1,0 +1,3735 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts  
+Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+
+<struts>
+
+	<constant name="struts.multipart.maxSize" value="300000000000" />
+	
+<!-- 	<constant name="struts.action.extension" value="xhtml,,xml,json,action"/>
+	
+	<constant name="struts.mapper.class" value="org.apache.struts2.dispatcher.mapper.PrefixBasedActionMapper" />
+	<constant name="struts.mapper.prefixMapping" value="/rest:rest,:struts"/>
+	<constant name="struts.actionProxyFactory" value="prefix"/>
+	
+	<constant name="struts.convention.action.suffix" value="Controller"/>
+	<constant name="struts.convention.action.mapAllMatches" value="true"/>
+	<constant name="struts.convention.default.parent.package" value="rest-default"/>
+	<constant name="struts.convention.package.locators" value="eDhanvantari.controllers"/> -->
+
+	<package name="default" extends="struts-default">
+		<interceptors>
+
+			<interceptor name="authentication"
+				class="com.edhanvantari.interceptor.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+
+			<interceptor name="ConfigurationCheckInterceptor"
+				class="com.edhanvantari.interceptor.ConfigurationCheckInterceptor"></interceptor>
+			<interceptor-stack name="configurationCheckStack">
+				<interceptor-ref
+					name="ConfigurationCheckInterceptor"></interceptor-ref>
+			</interceptor-stack>
+
+		</interceptors>
+
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+
+		<!-- Global Result Forward -->
+		<global-results>
+			<result name="login" type="redirect">Home</result>
+
+		</global-results>
+
+		<action name="Home">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>index.jsp</result>
+		</action>
+
+		<action name="PatientLogin">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>Pindex.jsp</result>
+		</action>
+
+		<action name="Login"
+			class="com.edhanvantari.action.LoginAction">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="SurveyorSuccess" type="redirectAction">
+				<param name="actionName">RenderAddPatient</param>
+			</result>
+			<result name="PharmacistSuccess" type="redirectAction">
+				<param name="actionName">SearchPharmaPatients</param>
+			</result>
+			<result name="success">Welcome.jsp</result>
+			<result name="input">index.jsp</result>
+			<result name="error">index.jsp</result>
+			<result name="login">index.jsp</result>
+			<result name="locked">index.jsp</result>
+			<result name="exception">index.jsp</result>
+		</action>
+
+		<action name="Welcome"
+			class="com.edhanvantari.action.PatientAction"
+			method="viewDashboardAppointment">
+			<result name="success">Welcome.jsp</result>
+		</action>
+
+		<action name="SearchPharmaPatients"
+			class="com.edhanvantari.action.PatientAction"
+			method="SearchPharmaPatients">
+			<result name="success">pharmacist.jsp</result>
+			<result name="error">pharmacist.jsp</result>
+		</action>
+
+		<action name="null" class="">
+			<result>Home</result>
+		</action>
+
+		<action name="PatientP"
+			class="com.edhanvantari.action.LoginAction" method="patientLogin">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+
+			<result name="success">patientWelcome.jsp</result>
+			<result name="error">Pindex.jsp</result>
+			<result name="input">Pndex.jsp</result>
+			<result name="login">Pindex.jsp</result>
+			<result name="locked">Pindex.jsp</result>
+			<result name="exception">Pindex.jsp</result>
+		</action>
+
+		<action name="SignUp"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="userSignUp">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success">index.jsp</result>
+			<result name="input">signUp.jsp</result>
+			<result name="error">signUp.jsp</result>
+
+		</action>
+
+		<action name="Logout"
+			class="com.edhanvantari.action.LoginAction" method="logoutUser">
+			<result name="success">index.jsp</result>
+		</action>
+
+		<action name="RenderOnGoingTimers"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderOnGoingTimers">						<!-- New added -->
+			<result name="success">onGoingTimers.jsp</result>
+		</action>
+
+		<action name="RenderAddUser"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="renderAddUser">
+			<result name="success">addUser.jsp</result>
+		</action>
+
+		<action name="AddUser"
+			class="com.edhanvantari.action.RegistrationAction">
+			<result name="success">addUser.jsp</result>
+			<result name="input">addUser.jsp</result>
+			<result name="error">addUser.jsp</result>
+			<result name="clnicTypeSelect">addUser.jsp</result>
+		</action>
+
+		<action name="EditUserList"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="editUserList">
+			<result name="success">editUserList.jsp</result>
+		</action>
+
+		<action name="RenderEditUserList"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="renderEditUserList">
+			<result name="success">editUserList.jsp</result>
+			<result name="error">editUserList.jsp</result>
+		</action>
+
+		<action name="RenderEditUser"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="renderEditUser">
+			<result name="success">editUser.jsp</result>
+		</action>
+
+		<action name="DisableUser"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="deleteUser">
+			<result name="success" type="redirectAction">
+				<param name="actionName">EditUserList</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">EditUserList</param>
+			</result>
+		</action>
+
+		<action name="EditUser"
+			class="com.edhanvantari.action.RegistrationAction" method="editUser">
+			<result name="success">editUser.jsp</result>
+			<result name="error">editUser.jsp</result>
+			<result name="input">editUser.jsp</result>
+		</action>
+
+		<action name="EditUserProfile"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="editUserProfile">
+			<result name="success">userProfile.jsp</result>
+			<result name="error">userProfile.jsp</result>
+			<result name="input">userProfile.jsp</result>
+		</action>
+
+		<action name="EditClinicList"
+			class="com.edhanvantari.action.ClinicAction" method="editClinicList">
+			<result name="success">editClinicList.jsp</result>
+		</action>
+
+		<action name="EditClinic"
+			class="com.edhanvantari.action.ClinicAction" method="editClinic">
+			<result name="success">editClinic.jsp</result>
+			<result name="error">editClinic.jsp</result>
+			<result name="input">editClinic.jsp</result>
+		</action>
+
+
+		<action name="EnableUser"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="enableUser">
+			<result name="success" type="redirectAction">
+				<param name="actionName">EditUserList</param>
+			</result>
+			<result name="error" type="redirectAction">
+				<param name="actionName">EditUserList</param>
+			</result>
+		</action>
+
+		<action name="AddPatient"
+			class="com.edhanvantari.action.PatientAction" method="addPatient">
+
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">patientList.jsp</result>
+		</action>
+
+		<action name="EditPatientList"
+			class="com.edhanvantari.action.PatientAction"
+			method="editPatientList">
+			<result name="success">editPatientList.jsp</result>
+		</action>
+
+		<action name="RenderEditPatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderEditPatient">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="EditPatient"
+			class="com.edhanvantari.action.PatientAction" method="editPatient">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="EditPatientProfile"
+			class="com.edhanvantari.action.PatientAction"
+			method="editPatientProfile">
+			<result name="success">editPatientProfile.jsp</result>
+			<result name="error">editPatientProfile.jsp</result>
+			<result name="input">editPatientProfile.jsp</result>
+		</action>
+
+		<action name="InsertPatient"
+			class="com.edhanvantari.action.PatientAction" method="insertPatient">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="PatientAdd"
+			class="com.edhanvantari.action.PatientAction"
+			method="addPatientCancel">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="ViewPatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="editPatientList">
+			<result name="success">viewPatient.jsp</result>
+		</action>
+
+		<action name="RenderAddNewVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderAddNewVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">viewPatient.jsp</result>
+		</action>
+
+		<action name="AddNewVisit"
+			class="com.edhanvantari.action.PatientAction" method="addNewVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewPrescription">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewIPDPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewIPDPrescription">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewInvestigation"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewInvestigation">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewBill"
+			class="com.edhanvantari.action.PatientAction" method="addNewBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewIPDOpthBill"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewIPDOpthBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="RenderViewVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderViewVisitList">
+			<result name="success">viewExistingVisitList.jsp</result>
+			<result name="error">viewPatient.jsp</result>
+		</action>
+
+		<action name="EditVisit"
+			class="com.edhanvantari.action.PatientAction" method="editVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="editPrescription">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditIPDPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="editIPDPrescription">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditInvestigation"
+			class="com.edhanvantari.action.PatientAction"
+			method="editInvestigation">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditBill"
+			class="com.edhanvantari.action.PatientAction" method="editBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditIPDOpthBill"
+			class="com.edhanvantari.action.PatientAction"
+			method="editIPDOpthBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="RenderEditExistingVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderViewVisit">
+			<result name="success">${pageName}</result>
+		</action>
+		
+		<action name="GetVisitDetails" class="com.edhanvantari.action.PatientAction"
+			method="getVisitDetails">
+		</action>
+
+		<action name="AddPrecriptionDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="addPrecriptionDetails" />
+
+		<action name="DeletePrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="deletePrescription" />
+
+		<action name="DeleteFrequencyDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteFrequencyDetails" />
+
+		<action name="AddFrequency"
+			class="com.edhanvantari.action.PatientAction" method="addFrequency" />
+
+		<action name="DeleteInvestigation"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteInvestigation" />
+			
+		<action name="DeleteDiagnostic"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteDiagnostic" />
+			
+		<action name="DeleteProcedure"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteProcedure" />
+
+		<action name="DeleteSymptom"
+			class="com.edhanvantari.action.PatientAction" method="deleteSymptom" />
+
+		<action name="DeleteMedicalHistory"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteMedicalHistory" />
+
+		<action name="DeleteCurrentMedication"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteCurrentMedication" />
+
+		<action name="DeleteComplaint"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteComplaint" />
+
+		<action name="UpdatePrecriptionDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePrecriptionDetails" />
+
+		<action name="ChangeSpecialisation"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="changeSpecialisation" />
+
+		<action name="ChangeSpecialisationByUserID"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="changeSpecialisationByUserID" />
+
+		<action name="AddNewOPDVisit"
+			class="com.edhanvantari.action.PatientAction" method="addNewOPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="printAddNewOPDVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="printAddNewOPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="UpdateAddOPDVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateAddOPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="PrintOPDVisit"
+			class="com.edhanvantari.action.PatientAction" method="printOPDVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdatePrintOPDVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePrintOPDVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="RenderIPDVisit"
+			class="com.edhanvantari.action.PatientAction" method="renderIPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">viewPatient.jsp</result>
+		</action>
+
+		<action name="AddNewOptician"
+			class="com.edhanvantari.action.PatientAction" method="addNewOptician">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="FetchOldGlassPreviousValue"
+			class="com.edhanvantari.action.PatientAction"
+			method="fetchOldGlassPreviousValue" />
+
+		<action name="UpdateOPDVisit"
+			class="com.edhanvantari.action.PatientAction" method="updateOPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdateOptician"
+			class="com.edhanvantari.action.PatientAction" method="updateOptician">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddMedicalCerificate"
+			class="com.edhanvantari.action.PatientAction"
+			method="addMedicalCerificate">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdateMedicalCertificate"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateMedicalCertificate">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddReferralLetter"
+			class="com.edhanvantari.action.PatientAction"
+			method="addReferralLetter">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdateReferralLetter"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateReferralLetter">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewIPDVisit"
+			class="com.edhanvantari.action.PatientAction" method="addNewIPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="AddIPDComplaints"
+			class="com.edhanvantari.action.PatientAction"
+			method="addIPDComplaints" />
+
+		<action name="DeleteIPDComplaint"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteIPDComplaint" />
+
+		<action name="RetrieveIPDComplaintValues"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveIPDComplaintValues" />
+
+		<action name="AddIPDContinuationSheet"
+			class="com.edhanvantari.action.PatientAction"
+			method="addIPDContinuationSheet" />
+
+		<action name="DeleteIPDCOntinuationSHeet"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteIPDCOntinuationSHeet" />
+
+		<action name="RetrieveIPDContinuationSheetValues"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveIPDContinuationSheetValues" />
+
+		<action name="PrintConsent"
+			class="com.edhanvantari.action.PatientAction" method="printConsent">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdateConsent"
+			class="com.edhanvantari.action.PatientAction" method="updateConsent">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdateIPDVisit"
+			class="com.edhanvantari.action.PatientAction" method="updateIPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="SearchPatient"
+			class="com.edhanvantari.action.PatientAction" method="searchPatient">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="AddNewAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewAppointment">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">addNewAppointment.jsp</result>
+			<result name="input">addNewAppointment.jsp</result>
+		</action>
+
+		<action name="RenderAddApointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderAddApointment">
+			<result name="success">addNewAppointment.jsp</result>
+		</action>
+
+		<action name="ViewAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="viewAppointment">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">Welcome.jsp</result>
+		</action>
+
+		<action name="ConfirmAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="confirmAppointment">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">Welcome.jsp</result>
+		</action>
+
+		<action name="CancelAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="cancelAppointment">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">Welcome.jsp</result>
+		</action>
+
+		<action name="RenderAddNewApptVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderAddNewVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">Welcome.jsp</result>
+		</action>
+
+		<action name="PrintGenPhyVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="printGenPhyVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpadateGenPhyVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="upadateGenPhyVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintGenPhyInvestigation"
+			class="com.edhanvantari.action.PatientAction"
+			method="printGenPhyInvestigation">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintOptician"
+			class="com.edhanvantari.action.PatientAction" method="printOptician">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintUpdateOptician"
+			class="com.edhanvantari.action.PatientAction"
+			method="printUpdateOptician">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintBill"
+			class="com.edhanvantari.action.PatientAction" method="printBill">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintGenPhyBilling"
+			class="com.edhanvantari.action.PatientAction"
+			method="printGenPhyBilling">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdatePrintGenPhyVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePrintGenPhyVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<!-- <result name="success">${pageName}</result> -->
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="UpdatePrintGenPhyInvestigation"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePrintGenPhyInvestigation">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<!-- <result name="input">${pageName}</result> -->
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdatePrintBill"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePrintBill">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdatePrintGenPhyBilling"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePrintGenPhyBilling">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="RenderApptIPDVisit"
+			class="com.edhanvantari.action.PatientAction" method="renderIPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">viewPatient.jsp</result>
+		</action>
+
+		<action name="PrintOPDPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="printOPDPrescription">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdatePrintOPDPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePrintOPDPrescription">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintIPDForm"
+			class="com.edhanvantari.action.PatientAction" method="printIPDForm">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdatePrintIPDForm"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePrintIPDForm">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="ViewLastOPDVisitDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="viewLastOPDVisitDetails">
+			<result name="success">viewLastOPDVisit.jsp</result>
+		</action>
+
+		<action name="RenderConfigureDiagnoses"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderConfigureDiagnoses">
+			<result name="success">configureDiagnosis.jsp</result>
+			<result name="error">configureDiagnosis.jsp</result>
+		</action>
+
+		<action name="ConfigureDiagnoses"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="configureDiagnoses">
+			<result name="success">configureDiagnosis.jsp</result>
+			<result name="error">configureDiagnosis.jsp</result>
+		</action>
+
+		<action name="RenderConfigureReferringDoctor"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderConfigureReferringDoctor">
+			<result name="success">configureReferringDoctor.jsp</result>
+			<result name="error">configureReferringDoctor.jsp</result>
+		</action>
+
+		<action name="ConfigureReferringDoctor"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="configureReferringDoctor">
+			<result name="success">configureReferringDoctor.jsp</result>
+			<result name="error">configureReferringDoctor.jsp</result>
+		</action>
+
+		<action name="RenderConfigureFrequency"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderConfigureFrequency">
+			<result name="success">configureFrequency.jsp</result>
+			<result name="error">configureFrequency.jsp</result>
+		</action>
+
+		<action name="ConfigureFrequency"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="configureFrequency">
+			<result name="success">configureFrequency.jsp</result>
+			<result name="error">configureFrequency.jsp</result>
+		</action>
+
+		<action name="AddLabReport"
+			class="com.edhanvantari.action.PatientAction" method="addLabReport">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="DownloadLabReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadLabReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="UpdateDownloadGenPhyVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateDownloadGenPhyVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="UpdateDownloadBill"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateDownloadBill">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="DownloadGenPhyVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadGenPhyVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="DownloadBill"
+			class="com.edhanvantari.action.PatientAction" method="downloadBill">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="RenderEditDiagnosis"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditDiagnosis">
+			<result name="success">configureDiagnosis.jsp</result>
+			<result name="error">configureDiagnosis.jsp</result>
+		</action>
+
+		<action name="DeleteDiagnosis"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="deleteDiagnosis">
+			<result name="success">configureDiagnosis.jsp</result>
+			<result name="error">configureDiagnosis.jsp</result>
+		</action>
+
+		<action name="EditConfigureDiagnosis"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editConfigureDiagnosis">
+			<result name="success">configureDiagnosis.jsp</result>
+			<result name="error">configureDiagnosis.jsp</result>
+		</action>
+
+		<action name="RenderEditFrequency"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditFrequency">
+			<result name="success">configureFrequency.jsp</result>
+			<result name="error">configureFrequency.jsp</result>
+		</action>
+
+		<action name="DeleteFrequency"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="deleteFrequency">
+			<result name="success">configureFrequency.jsp</result>
+			<result name="error">configureFrequency.jsp</result>
+		</action>
+
+		<action name="EditConfigureFrequency"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editConfigureFrequency">
+			<result name="success">configureFrequency.jsp</result>
+			<result name="error">configureFrequency.jsp</result>
+		</action>
+
+		<action name="RenderEditRefDoc"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditRefDoc">
+			<result name="success">configureReferringDoctor.jsp</result>
+			<result name="error">configureReferringDoctor.jsp</result>
+		</action>
+
+		<action name="DeleteRefDoc"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="deleteRefDoc">
+			<result name="success">configureReferringDoctor.jsp</result>
+			<result name="error">configureReferringDoctor.jsp</result>
+		</action>
+
+		<action name="EditConfigureReferringDoctor"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editConfigureReferringDoctor">
+			<result name="success">configureReferringDoctor.jsp</result>
+			<result name="error">configureReferringDoctor.jsp</result>
+		</action>
+
+		<action name="EditLabReport"
+			class="com.edhanvantari.action.PatientAction" method="editLabReport">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AppointmentTimeCheck"
+			class="com.edhanvantari.action.PatientAction"
+			method="appointmentTimeCheck" />
+
+		<action name="RenderViewApointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderViewApointment">
+			<result name="success">viewAppointment.jsp</result>
+			<result name="error">viewAppointment.jsp</result>
+		</action>
+
+		<action name="SearchPatientMedicalReport"
+			class="com.edhanvantari.action.PatientAction" method="searchPatient">
+			<result name="success">medicalReport.jsp</result>
+			<result name="error">medicalReport.jsp</result>
+		</action>
+
+		<action name="RenderMedicalBilling"
+			class="com.edhanvantari.action.ReportAction"
+			method="renderMedicalBilling">
+			<result name="success">medicalReport.jsp</result>
+			<result name="error">medicalReport.jsp</result>
+		</action>
+
+		<action name="PrintBillingReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="printBillingReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">medicalReport.jsp</result>
+			<result name="error">medicalReport.jsp</result>
+		</action>
+
+		<action name="RenderMedicalNotes"
+			class="com.edhanvantari.action.ReportAction"
+			method="renderMedicalNotes">
+			<result name="success">medicalReport.jsp</result>
+			<result name="error">medicalReport.jsp</result>
+		</action>
+
+		<action name="PrintMedicalNotesReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="printMedicalNotesReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">medicalReport.jsp</result>
+			<result name="error">medicalReport.jsp</result>
+		</action>
+
+		<action name="ReportPDFDownload"
+			class="com.edhanvantari.action.ReportAction"
+			method="reportPDFDownload" />
+
+		<action name="PrintMedicalHistory"
+			class="com.edhanvantari.action.ReportAction"
+			method="printMedicalHistory">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">medicalReport.jsp</result>
+			<result name="error">medicalReport.jsp</result>
+		</action>
+
+		<action name="VerifyUnlockPIN"
+			class="com.edhanvantari.action.LoginAction" method="verifyUnlockPIN" />
+
+		<action name="VerifyOldPass"
+			class="com.edhanvantari.action.LoginAction" method="verifyOldPass" />
+
+		<action name="UpdateSecurityCredentials"
+			class="com.edhanvantari.action.LoginAction"
+			method="updateSecurityCredentials" />
+
+		<action name="NewPassCheck"
+			class="com.edhanvantari.action.LoginAction" method="newPassCheck" />
+
+		<action name="SearchUser"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="searchUser">
+			<result name="success">editUserList.jsp</result>
+			<result name="error">editUserList.jsp</result>
+		</action>
+
+		<action name="RenderEditProfile"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="renderEditProfile">
+			<result name="success">userProfile.jsp</result>
+			<result name="error">userProfile.jsp</result>
+		</action>
+
+		<action name="RenderPatientProfile"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderPatientProfile">
+			<result name="success">editPatientProfile.jsp</result>
+			<result name="error">editPatientProfile.jsp</result>
+		</action>
+
+		<action name="RenderPatientVisitList"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderPatientVisitList">
+			<result name="success">patientWelcome.jsp</result>
+			<result name="error">patientWelcome.jsp</result>
+		</action>
+
+		<action name="SearchDiagnoses"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="searchDiagnoses">
+			<result name="success">configureDiagnosis.jsp</result>
+			<result name="error">configureDiagnosis.jsp</result>
+		</action>
+
+		<action name="ViewAllDiagnoses"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllDiagnoses">
+			<result name="success">configureDiagnosis.jsp</result>
+			<result name="error">configureDiagnosis.jsp</result>
+		</action>
+
+		<action name="SearchFrequencies"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="searchFrequencies">
+			<result name="success">configureFrequency.jsp</result>
+			<result name="error">configureFrequency.jsp</result>
+		</action>
+
+		<action name="ViewAllFrequencies"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllFrequencies">
+			<result name="success">configureFrequency.jsp</result>
+			<result name="error">configureFrequency.jsp</result>
+		</action>
+
+		<action name="SearchRefDoctor"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="searchRefDoctor">
+			<result name="success">configureReferringDoctor.jsp</result>
+			<result name="error">configureReferringDoctor.jsp</result>
+		</action>
+
+		<action name="ViewAllRefDoctor"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllRefDoctor">
+			<result name="success">configureReferringDoctor.jsp</result>
+			<result name="error">configureReferringDoctor.jsp</result>
+		</action>
+
+		<action name="SearchEditPatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="searchEditPatient">
+			<result name="success">editPatientList.jsp</result>
+			<result name="error">editPatientList.jsp</result>
+		</action>
+
+		<action name="RenderEditPatientList"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderEditPatientList">
+			<result name="success">editPatientList.jsp</result>
+			<result name="error">editPatientList.jsp</result>
+		</action>
+
+		<action name="SearchViewPatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="searchEditPatient">
+			<result name="success">viewPatient.jsp</result>
+			<result name="error">viewPatient.jsp</result>
+		</action>
+
+		<action name="RenderViewPatientList"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderEditPatientList">
+			<result name="success">viewPatient.jsp</result>
+			<result name="error">viewPatient.jsp</result>
+		</action>
+
+		<action name="RenderViewMedicalPatientList"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderViewMedicalPatientList">
+			<result name="success">medicalReport.jsp</result>
+			<result name="error">medicalReport.jsp</result>
+		</action>
+
+		<action name="ViewAllVisitType"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllVisitType">
+			<result name="success">configureVisitType.jsp</result>
+			<result name="error">configureVisitType.jsp</result>
+		</action>
+
+		<action name="RenderConfigureVisitType"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderConfigureVisitType">
+			<result name="success">configureVisitType.jsp</result>
+			<result name="error">configureVisitType.jsp</result>
+		</action>
+
+		<action name="ConfigureVisitType"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="configureVisitType">
+			<result name="success">configureVisitType.jsp</result>
+			<result name="error">configureVisitType.jsp</result>
+		</action>
+
+		<action name="DeleteVisitType"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="deleteVisitType">
+			<result name="success">configureVisitType.jsp</result>
+			<result name="error">configureVisitType.jsp</result>
+		</action>
+
+		<action name="EditConfigureVisitType"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editConfigureVisitType">
+			<result name="success">configureVisitType.jsp</result>
+			<result name="error">configureVisitType.jsp</result>
+		</action>
+
+		<action name="AddPractice"
+			class="com.edhanvantari.action.ClinicAction" method="addPractice">
+			<result name="success">addPractice.jsp</result>
+			<result name="error">addPractice.jsp</result>
+			<result name="input">addPractice.jsp</result>
+		</action>
+
+		<action name="VerifyPracticeExists"
+			class="com.edhanvantari.action.ClinicAction"
+			method="verifyPracticeExists" />
+
+		<action name="RenderAddPractice"
+			class="com.edhanvantari.action.ClinicAction"
+			method="renderAddPractice">
+			<result>addPractice.jsp</result>
+		</action>
+
+		<action name="EditPracticeList">
+			<result>editPracticeList.jsp</result>
+		</action>
+
+		<action name="SearchPractice"
+			class="com.edhanvantari.action.ClinicAction" method="searchPractice">
+			<result name="success">editPracticeList.jsp</result>
+			<result name="error">editPracticeList.jsp</result>
+		</action>
+
+		<action name="ViewAllPracticeList"
+			class="com.edhanvantari.action.ClinicAction"
+			method="viewAllPracticeList">
+			<result name="success">editPracticeList.jsp</result>
+			<result name="error">editPracticeList.jsp</result>
+		</action>
+
+		<action name="RenderEditPractice"
+			class="com.edhanvantari.action.ClinicAction"
+			method="renderEditPractice">
+			<result name="success">editPractice.jsp</result>
+		</action>
+
+		<action name="DeleteClinicRow"
+			class="com.edhanvantari.action.ClinicAction" method="deleteClinicRow" />
+
+		<action name="DisablePlanRow"
+			class="com.edhanvantari.action.ClinicAction" method="disablePlanRow" />
+
+		<action name="ChangeClinicForVisit"
+			class="com.edhanvantari.action.LoginAction"
+			method="changeClinicForVisitList">
+			<result name="success">patientWelcome.jsp</result>
+			<result name="error">patientWelcome.jsp</result>
+		</action>
+
+		<action name="EditPractice"
+			class="com.edhanvantari.action.ClinicAction" method="editPractice">
+			<result name="success">editPractice.jsp</result>
+			<result name="error">editPractice.jsp</result>
+			<result name="input">editPractice.jsp</result>
+		</action>
+
+		<action name="GetPracticeClinic"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="getPracticeClinic" />
+
+		<action name="RenderAddPatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderAddPatient">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="RenderAddVisitType"
+			class="com.edhanvantari.action.ClinicAction"
+			method="renderAddVisitType">
+			<result name="success">addVisitType.jsp</result>
+		</action>
+
+		<action name="AddVisitType"
+			class="com.edhanvantari.action.ClinicAction" method="addVisitType">
+			<result name="success">addVisitType.jsp</result>
+			<result name="error">addVisitType.jsp</result>
+		</action>
+
+		<action name="EditVisitTypeList"
+			class="com.edhanvantari.action.ClinicAction"
+			method="editVisitTypeList">
+			<result name="success">editVisitTypeList.jsp</result>
+		</action>
+
+		<action name="SearchVisitType"
+			class="com.edhanvantari.action.ClinicAction" method="searchVisitType">
+			<result name="success">editVisitTypeList.jsp</result>
+			<result name="error">editVisitTypeList.jsp</result>
+		</action>
+
+		<action name="ViewAllVisitTypeList"
+			class="com.edhanvantari.action.ClinicAction"
+			method="viewAllVisitTypeList">
+			<result name="success">editVisitTypeList.jsp</result>
+			<result name="error">editVisitTypeList.jsp</result>
+		</action>
+
+		<action name="RenderEditVisitType"
+			class="com.edhanvantari.action.ClinicAction"
+			method="renderEditVisitType">
+			<result name="success">editVisitType.jsp</result>
+		</action>
+
+		<action name="EditVisitType"
+			class="com.edhanvantari.action.ClinicAction" method="editVisitType">
+			<result name="success">editVisitType.jsp</result>
+			<result name="error">editVisitType.jsp</result>
+		</action>
+
+		<action name="DisableVisitType"
+			class="com.edhanvantari.action.ClinicAction"
+			method="disableVisitType">
+			<result name="success">editVisitTypeList.jsp</result>
+			<result name="error">editVisitTypeList.jsp</result>
+			<result name="input">editVisitTypeList.jsp</result>
+		</action>
+
+		<action name="GetClinicStartEndTime"
+			class="com.edhanvantari.action.LoginAction"
+			method="getClinicStartEndTime" />
+
+		<action name="GetClinicBreak1Time"
+			class="com.edhanvantari.action.LoginAction"
+			method="getClinicBreak1Time" />
+
+		<action name="GetDaysOtherThanClinicWorkingDays"
+			class="com.edhanvantari.action.LoginAction"
+			method="getDaysOtherThanClinicWorkingDays" />
+
+		<action name="GetClinicBreak2Time"
+			class="com.edhanvantari.action.LoginAction"
+			method="getClinicBreak2Time" />
+
+		<action name="GetClinicSlot1TimeAndName"
+			class="com.edhanvantari.action.LoginAction"
+			method="getClinicSlot1TimeAndName" />
+
+		<action name="GetClinicSlot2TimeAndName"
+			class="com.edhanvantari.action.LoginAction"
+			method="getClinicSlot2TimeAndName" />
+
+		<action name="GetVisitDuration"
+			class="com.edhanvantari.action.LoginAction" method="getVisitDuration" />
+
+		<action name="VerifyPatientDetails"
+			class="com.edhanvantari.action.LoginAction"
+			method="verifyPatientDetails" />
+
+		<action name="GetAppointmentDuration"
+			class="com.edhanvantari.action.LoginAction"
+			method="getAppointmentDuration" />
+
+		<action name="AddAppointment"
+			class="com.edhanvantari.action.ClinicAction" method="addAppointment" />
+
+		<action name="DownloadCircular"
+			class="com.edhanvantari.action.LoginAction" method="downloadCircular">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="DownloadCRF"
+			class="com.edhanvantari.action.PatientAction" method="downloadCRF">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">patientWelcome.jsp</result>
+			<result name="input">patientWelcome.jsp</result>
+		</action>
+
+		<action name="DownloadPRESC"
+			class="com.edhanvantari.action.PatientAction" method="downloadPRESC">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">patientWelcome.jsp</result>
+			<result name="input">patientWelcome.jsp</result>
+		</action>
+		
+		<!-- //Change -->
+		<action name="UpdateCommentAction"
+			class="com.edhanvantari.action.PatientAction" method="updateCommentAction">
+			<result name="success">
+				<param name="root">updatedComment</param>
+			</result>
+		</action>
+
+		<action name="DownloadBILL"
+			class="com.edhanvantari.action.PatientAction" method="downloadBILL">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">patientWelcome.jsp</result>
+			<result name="input">patientWelcome.jsp</result>
+		</action>
+
+		<action name="ViewCRF"
+			class="com.edhanvantari.action.PatientAction" method="viewCRF" />
+
+		<action name="ViewPRESC"
+			class="com.edhanvantari.action.PatientAction" method="viewPRESC" />
+
+		<action name="ViewBILL"
+			class="com.edhanvantari.action.PatientAction" method="viewBILL" />
+
+		<action name="ViewGenericVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="viewGenericVisit">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="ViewTelephonicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="viewTelephonicVisit">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="ViewOphthVisit"
+			class="com.edhanvantari.action.PatientAction" method="viewOphthVisit">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="RetrievePatientDetails"
+			class="com.edhanvantari.action.ClinicAction"
+			method="retrievePatientDetails" />
+
+		<action name="UpdateConfirmAppointmentStatus"
+			class="com.edhanvantari.action.ClinicAction"
+			method="updateConfirmAppointmentStatus" />
+			
+		<!-- Change -->
+		<action name="UpdateCommentByID" class="com.edhanvantari.action.ClinicAction" method="updateCommentByID" />
+
+		<action name="UpdateCancelledAppointmentStatus"
+			class="com.edhanvantari.action.ClinicAction"
+			method="updateCancelledAppointmentStatus" />
+
+		<action name="ApptCalendarJSONServlet"
+			class="com.edhanvantari.util.ApptCalendarJSONUtil"
+			method="apptCalendarJSONServlet" />
+
+		<action name="SearchCategory"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchCategory">
+			<result name="success">addCategory.jsp</result>
+			<result name="error">addCategory.jsp</result>
+		</action>
+
+		<action name="ViewAllCategories"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllCategories">
+			<result name="success">addCategory.jsp</result>
+			<result name="error">addCategory.jsp</result>
+		</action>
+
+		<action name="AddCategory"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addCategory">
+			<result name="success">addCategory.jsp</result>
+			<result name="error">addCategory.jsp</result>
+		</action>
+
+		<action name="RenderEditCategory"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditCategory">
+			<result name="success">addCategory.jsp</result>
+		</action>
+
+		<action name="EditCategory"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editCategory">
+			<result name="success">addCategory.jsp</result>
+			<result name="error">addCategory.jsp</result>
+		</action>
+
+		<action name="DeleteCategory"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteCategory">
+			<result name="success">addCategory.jsp</result>
+			<result name="error">addCategory.jsp</result>
+		</action>
+
+		<action name="SearchTax"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchTax">
+			<result name="success">addTax.jsp</result>
+			<result name="error">addTax.jsp</result>
+		</action>
+
+		<action name="ViewAllTaxes"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllTaxes">
+			<result name="success">addTax.jsp</result>
+			<result name="error">addTax.jsp</result>
+		</action>
+
+		<action name="AddTax"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addTax">
+			<result name="success">addTax.jsp</result>
+			<result name="error">addTax.jsp</result>
+		</action>
+
+		<action name="RenderEditTax"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditTax">
+			<result name="success">addTax.jsp</result>
+		</action>
+
+		<action name="EditTax"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editTax">
+			<result name="success">addTax.jsp</result>
+			<result name="error">addTax.jsp</result>
+		</action>
+
+		<action name="DeleteTax"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteTax">
+			<result name="success">addTax.jsp</result>
+			<result name="error">addTax.jsp</result>
+		</action>
+
+		<action name="RetrieveLastTumorSpecificDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveLastTumorSpecificDetails"></action>
+
+		<action name="AddSupplier"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addSupplier">
+			<result name="success">addSupplier.jsp</result>
+			<result name="error">addSupplier.jsp</result>
+		</action>
+
+		<action name="ViewAllSuppliers"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllSuppliers">
+			<result name="success">addSupplier.jsp</result>
+			<result name="error">addSupplier.jsp</result>
+		</action>
+
+		<action name="EditSupplier"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editSupplier">
+			<result name="success">addSupplier.jsp</result>
+			<result name="error">addSupplier.jsp</result>
+		</action>
+
+		<action name="RenderEditSupplier"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditSupplier">
+			<result name="success">addSupplier.jsp</result>
+		</action>
+
+		<action name="SearchSupplier"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchSupplier">
+			<result name="success">addSupplier.jsp</result>
+			<result name="error">addSupplier.jsp</result>
+		</action>
+
+		<action name="DeleteSupplier"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteSupplier">
+			<result name="success">addSupplier.jsp</result>
+			<result name="error">addSupplier.jsp</result>
+		</action>
+
+		<action name="RenderAddProduct"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderAddProduct">
+			<result name="success">addProduct.jsp</result>
+		</action>
+
+		<action name="AddProduct"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addProduct">
+			<result name="success">addProduct.jsp</result>
+			<result name="input">addProduct.jsp</result>
+			<result name="error">addProduct.jsp</result>
+			<result name="clnicTypeSelect">addProduct.jsp</result>
+		</action>
+
+		<action name="SearchProduct"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchProduct">
+			<result name="success">editProductList.jsp</result>
+			<result name="error">editProductList.jsp</result>
+		</action>
+
+		<action name="EditProductList"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editProductList">
+			<result name="success">editProductList.jsp</result>
+			<result name="error">editProductList.jsp</result>
+		</action>
+
+		<action name="RenderEditProduct"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditProduct">
+			<result name="success">editProduct.jsp</result>
+		</action>
+
+		<action name="EditProduct"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editProduct">
+			<result name="success">editProduct.jsp</result>
+			<result name="error">editProduct.jsp</result>
+		</action>
+
+		<action name="AddPrice"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addPrice">
+			<result name="success">editProduct.jsp</result>
+			<result name="error">editProduct.jsp</result>
+		</action>
+
+		<action name="VerifyProductExist"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="verifyProductExist" />
+
+		<action name="GetTaxPercent"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="getTaxPercent" />
+
+		<action name="RenderAddStock"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderAddStock">
+			<result name="success">addStock.jsp</result>
+		</action>
+
+		<action name="GetClientDetails"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="retrieveClientDetails" />
+
+		<action name="GetProductRate"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="retrieveProductRate" />
+
+		<action name="GetProduct"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="retrieveProductIDByBarcode" />
+
+		<action name="GetProductName"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="retrieveProductName"></action>
+
+		<action name="AddStockReceipt"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addStockReceipt">
+			<result name="success">addStock.jsp</result>
+			<result name="error">addStock.jsp</result>
+			<result name="noProductSelected">addStock.jsp</result>
+		</action>
+
+		<action name="SearchStock"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchStock">
+			<result name="success">editStockList.jsp</result>
+			<result name="error">editStockList.jsp</result>
+		</action>
+
+		<action name="EditStockList"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editStockList">
+			<result name="success">editStockList.jsp</result>
+			<result name="error">editStockList.jsp</result>
+		</action>
+
+		<action name="RenderEditStock"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditStock">
+			<result name="success">editStock.jsp</result>
+		</action>
+
+		<action name="DeleteProductRow"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteProductRow" />
+
+		<action name="EditStockReceipt"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editStockReceipt">
+			<result name="success">editStock.jsp</result>
+			<result name="error">editStock.jsp</result>
+		</action>
+
+		<action name="RenderRemoveStock"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderRemoveStock">
+			<result name="success">removeStock.jsp</result>
+		</action>
+
+		<action name="RemoveStock"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="removeStock">
+			<result name="success">removeStock.jsp</result>
+			<result name="error">removeStock.jsp</result>
+			<result name="noProductSelected">removeStock.jsp</result>
+		</action>
+
+		<action name="RenderOrderStock" method="renderOrderStock"
+			class="com.edhanvantari.action.PrescriptionManagementAction">
+			<result name="success">orderStock.jsp</result>
+		</action>
+
+		<action name="SearchOrderStock"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchOrderStock">
+			<result name="success">orderStock.jsp</result>
+			<result name="error">orderStock.jsp</result>
+		</action>
+
+		<action name="RenderConfirmOrder"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderConfirmOrder">
+			<result name="success">addOrder.jsp</result>
+		</action>
+
+		<action name="ConfirmOrder"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="confirmOrder">
+			<result name="success">addOrder.jsp</result>
+			<result name="error">addOrder.jsp</result>
+			<result name="noEmail">addOrder.jsp</result>
+		</action>
+
+		<action name="RetrieveTabName"
+			class="com.edhanvantari.action.ClinicAction" method="retrieveTabName" />
+
+		<action name="GetTradeNameByCategory"
+			class="com.edhanvantari.action.PatientAction"
+			method="getTradeNameByCategory" />
+
+		<action name="GetProductNameAndCategoryID"
+			class="com.edhanvantari.action.PatientAction"
+			method="getProductNameAndCategoryID" />
+
+		<action name="DeletePrescriptionRow"
+			class="com.edhanvantari.action.PatientAction"
+			method="deletePrescriptionRow" />
+
+		<action name="VerifyUsername"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="verifyUsername" />
+
+		<action name="SearchLeaveType"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="searchLeaveType">
+			<result name="success">manageLeaveType.jsp</result>
+			<result name="error">manageLeaveType.jsp</result>
+		</action>
+
+		<action name="ViewAllLeaveTypes"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="viewAllLeaveTypes">
+			<result name="success">manageLeaveType.jsp</result>
+			<result name="error">manageLeaveType.jsp</result>
+		</action>
+
+		<action name="RenderEditLeaveType"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="renderEditLeaveType">
+			<result name="success">manageLeaveType.jsp</result>
+		</action>
+
+		<action name="AddLeaveType"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="addLeaveType">
+			<result name="success">manageLeaveType.jsp</result>
+			<result name="error">manageLeaveType.jsp</result>
+		</action>
+
+		<action name="EditLeaveType"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="editLeaveType">
+			<result name="success">manageLeaveType.jsp</result>
+			<result name="error">manageLeaveType.jsp</result>
+		</action>
+
+		<action name="UpdateAppointment"
+			class="com.edhanvantari.action.ClinicAction"
+			method="updateAppointment"></action>
+
+		<action name="RenderAddNewPatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderAddNewPatient">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="ChangeClinic"
+			class="com.edhanvantari.action.LoginAction" method="changeClinic">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">Welcome.jsp</result>
+		</action>
+
+		<action name="RetrieveClinicListForPractice"
+			class="com.edhanvantari.action.ClinicAction"
+			method="retrieveClinicListForPractice" />
+
+		<action name="RenderSendSMS"
+			class="com.edhanvantari.action.PatientAction" method="renderSendSMS">
+			<result name="success">sendBulkSMS.jsp</result>
+		</action>
+
+		<action name="SendDiagnosisBulkSMS"
+			class="com.edhanvantari.action.PatientAction"
+			method="sendDiagnosisBulkSMS">
+			<result name="success">sendBulkSMS.jsp</result>
+			<result name="error">sendBulkSMS.jsp</result>
+		</action>
+
+		<action name="SendPatientCreditBulkSMS"
+			class="com.edhanvantari.action.PatientAction"
+			method="sendPatientCreditBulkSMS">
+			<result name="success">sendBulkSMS.jsp</result>
+			<result name="error">sendBulkSMS.jsp</result>
+		</action>
+
+		<action name="ChangeVisitTypeID"
+			class="com.edhanvantari.action.PatientAction"
+			method="changeVisitTypeID">
+			<result name="success" type="redirectAction">
+				<param name="actionName">RenderAddNewVisit</param>
+				<param name="patientID">${patientID}</param>
+				<param name="aptID">${aptID}</param>
+			</result>
+		</action>
+
+		<action name="SearchPatientReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="searchPatientReport">
+			<result name="success">viewLeaves.jsp</result>
+			<result name="error">viewLeaves.jsp</result>
+		</action>
+
+		<action name="SetVisitTypeID"
+			class="com.edhanvantari.action.PatientAction" method="setVisitTypeID">
+			<result name="success" type="redirectAction">
+				<param name="actionName">RenderAddNewVisit</param>
+				<param name="patientID">${patientID}</param>
+			</result>
+		</action>
+
+		<action name="RenderAddPatientAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderAddPatientAppointment">
+			<result name="error">addNewAppointment.jsp</result>
+			<result name="success">addNewAppointment.jsp</result>
+			<result name="facilitySuccess">addNewFacilityAppointment.jsp</result>
+		</action>
+
+		<action name="RetrieveRegistrationNumber"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveRegistrationNumber" />
+
+		<action name="RetrieveClinicCalendar"
+			class="com.edhanvantari.action.ClinicAction"
+			method="retrieveClinicCalendar" />
+
+		<action name="RetrieveUploadImage"
+			class="com.edhanvantari.action.ClinicAction"
+			method="retrieveUploadImage" />
+
+		<action name="EditClinicCalendar"
+			class="com.edhanvantari.action.ClinicAction"
+			method="editClinicCalendar" />
+
+		<action name="EditClinicUploadImage"
+			class="com.edhanvantari.action.ClinicAction"
+			method="editClinicUploadImage">
+			<result name="success">editPractice.jsp</result>
+			<result name="error">editPractice.jsp</result>
+			<result name="input">editPractice.jsp</result>
+		</action>
+
+		<action name="UploadLogoFile"
+			class="com.edhanvantari.action.ClinicAction" method="uploadLogoFile">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="UploadLetterHeadFile"
+			class="com.edhanvantari.action.ClinicAction"
+			method="uploadLetterHeadFile">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+
+		<action name="RenderEditAppointmentVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderEditAppointmentVisit">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="VerifyPatientExistsToCurrClinic"
+			class="com.edhanvantari.action.PatientAction"
+			method="verifyPatientExistsToCurrClinic" />
+
+		<action name="RetrievePatientListForDiagnosis"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrievePatientListForDiagnosis"></action>
+
+		<action name="RetrievePatientListForCredit"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrievePatientListForCredit"></action>
+
+		<action name="GetFrequencyCount"
+			class="com.edhanvantari.action.PatientAction"
+			method="getFrequencyCount" />
+
+		<action name="FetchPrescriptionBill"
+			class="com.edhanvantari.action.PatientAction"
+			method="fetchPrescriptionBill"></action>
+
+		<action name="VerifyProductNetStock"
+			class="com.edhanvantari.action.PatientAction"
+			method="verifyProductNetStock"></action>
+
+		<action name="FetchPrescriptionBillForEdit"
+			class="com.edhanvantari.action.PatientAction"
+			method="fetchPrescriptionBillForEdit" />
+
+		<action name="RetrieveCategoryWithDrugName"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveCategoryWithDrugName" />
+
+		<action name="SearchTradeNameList"
+			class="com.edhanvantari.action.PatientAction"
+			method="searchTradeNameList" />
+
+		<action name="RetrieveFrequencyDetailsByPrescriptionID"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveFrequencyDetailsByPrescriptionID" />
+
+		<action name="RenderDisablePatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderDisablePatient">
+			<result name="success">viewPatient.jsp</result>
+			<result name="error">viewPatient.jsp</result>
+		</action>
+
+		<action name="SendCustomizedBulkSMS"
+			class="com.edhanvantari.action.PatientAction"
+			method="sendCustomizedBulkSMS">
+			<result name="success">sendBulkSMS.jsp</result>
+			<result name="error">sendBulkSMS.jsp</result>
+			<result name="input">sendBulkSMS.jsp</result>
+		</action>
+
+		<action name="RetrievePatientActiveList"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrievePatientActiveList" />
+
+		<action name="ViewMyAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="viewMyAppointment">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">Welcome.jsp</result>
+		</action>
+
+		<action name="SendAppointmentReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="sendAppointmentReport">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="AddPatientAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewAppointment">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="RenderAddNewPatientAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderAddNewPatientAppointment">
+			<result name="success">${pageName}</result>
+		</action>
+
+		<action name="RetrievePatientVisitHistory"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrievePatientVisitHistory"></action>
+
+		<action name="RetrieveVisitHistoryDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveVisitHistoryDetails"></action>
+
+		<action name="RetrieveHistoryLists"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveHistoryLists"></action>
+
+		<action name="DownloadMonthAppointmentReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadMonthAppointmentReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="DownloadWeekAppointmentReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadWeekAppointmentReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="DownloadTodayAppointmentReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadTodayAppointmentReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="VerifyVisitExistsForAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="verifyVisitExistsForAppointment"></action>
+
+		<action name="VerifyUserPassword"
+			class="com.edhanvantari.action.PatientAction"
+			method="verifyUserPassword"></action>
+
+		<action name="UpdateDoneAppointmentStatus"
+			class="com.edhanvantari.action.ClinicAction"
+			method="updateDoneAppointmentStatus" />
+
+		<action name="RenderConfigureInstruction">
+			<result name="success">manageInstruction.jsp</result>
+		</action>
+
+		<action name="SearchInstructions"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="searchInstructions">
+			<result name="success">manageInstruction.jsp</result>
+			<result name="error">manageInstruction.jsp</result>
+		</action>
+
+		<action name="ViewAllInstructions"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllInstructions">
+			<result name="success">manageInstruction.jsp</result>
+			<result name="error">manageInstruction.jsp</result>
+		</action>
+
+		<action name="ConfigureInstructions"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="configureInstructions">
+			<result name="success">manageInstruction.jsp</result>
+			<result name="error">manageInstruction.jsp</result>
+		</action>
+
+		<action name="EditConfigureInstructions"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editConfigureInstructions">
+			<result name="success">manageInstruction.jsp</result>
+			<result name="error">manageInstruction.jsp</result>
+		</action>
+
+		<action name="RenderEditInstruction"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditInstruction">
+			<result name="success">manageInstruction.jsp</result>
+			<result name="error">manageInstruction.jsp</result>
+		</action>
+
+		<action name="DeleteInstruction"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="deleteInstruction">
+			<result name="success">manageInstruction.jsp</result>
+			<result name="error">manageInstruction.jsp</result>
+		</action>
+
+		<action name="GetCompoundTradeNameList"
+			class="com.edhanvantari.action.PatientAction"
+			method="getCompoundTradeNameList" />
+
+		<action name="GenerateCompoundCounter"
+			class="com.edhanvantari.action.PatientAction"
+			method="generateCompoundCounter" />
+
+		<action name="DownloadAppointmentReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadAppointmentReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="DownloadAppointmentReportToday"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadAppointmentReportToday">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="DownloadAppointmentReportWeek"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadAppointmentReportWeek">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="DownloadAppointmentReportMonth"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadAppointmentReportMonth">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">Welcome.jsp</result>
+			<result name="input">Welcome.jsp</result>
+		</action>
+
+		<action name="SearchSurveyLocation"
+			class="com.edhanvantari.action.PatientAction"
+			method="searchSurveyLocation" />
+
+		<action name="RetrieveStockReceiptNoByClinicID"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="retrieveStockReceiptNoByClinicID"></action>
+
+		<action name="RetrieveProductListByClinicID"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="retrieveProductListByClinicID"></action>
+
+		<action
+			name="UpdateDoneAppointmentStatusAndRetrievePatientDetails"
+			class="com.edhanvantari.action.ClinicAction"
+			method="updateDoneAppointmentStatusAndRetrievePatientDetails"></action>
+
+		<action name="RenderPatientReport" method="renderPatientReport"
+			class="com.edhanvantari.action.ReportAction">
+			<result name="error">patientReport.jsp</result>
+			<result name="success">patientReport.jsp</result>
+		</action>
+
+		<action name="RetrieveColumnNameList"
+			class="com.edhanvantari.action.ReportAction"
+			method="retrieveColumnNameList" />
+
+		<action name="VerifyColumn"
+			class="com.edhanvantari.action.ReportAction" method="verifyColumn" />
+
+		<action name="GetInitialWhereConditionByFromQuery"
+			class="com.edhanvantari.action.ReportAction"
+			method="getInitialWhereConditionByFromQuery" />
+
+		<action name="VerifyFkeyExists"
+			class="com.edhanvantari.action.ReportAction"
+			method="verifyFkeyExists"></action>
+
+		<action name="GenerateClinicalReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="generateClinicalReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">patientReport.jsp</result>
+			<result name="input">patientReport.jsp</result>
+		</action>
+
+		<action name="GenerateClinicalReportForAyurved"
+			class="com.edhanvantari.action.ReportAction"
+			method="generateClinicalReportForAyurved">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">patientReport.jsp</result>
+			<result name="input">patientReport.jsp</result>
+		</action>
+
+		<action name="RenderExecuteReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="renderExecuteReport">
+			<result name="error">viewClinicalReports.jsp</result>
+			<result name="success">viewClinicalReports.jsp</result>
+		</action>
+
+		<action name="RetriveColumnNamesForSavedQueryValues"
+			class="com.edhanvantari.action.ReportAction"
+			method="retriveColumnNamesForSavedQueryValues" />
+
+		<action name="ExecuteClinicalReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="executeClinicalReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">viewClinicalReports.jsp</result>
+			<result name="input">viewClinicalReports.jsp</result>
+		</action>
+
+		<action name="UpdateClinicalReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="updateClinicalReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="RetriveSavedQueryValues"
+			class="com.edhanvantari.action.ReportAction"
+			method="retriveSavedQueryValues" />
+
+		<action name="GenerateBillingReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="generateBillingReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">billingReport.jsp</result>
+			<result name="input">billingReport.jsp</result>
+		</action>
+
+		<action name="RenderBillingReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="renderBillingReport">
+			<result name="error">billingReport.jsp</result>
+			<result name="success">billingReport.jsp</result>
+		</action>
+
+		<action name="GenerateCreditReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="generateCreditReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">creditReport.jsp</result>
+			<result name="input">creditReport.jsp</result>
+		</action>
+
+		<action name="RenderCreditReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="renderCreditReport">
+			<result name="error">creditReport.jsp</result>
+			<result name="success">creditReport.jsp</result>
+		</action>
+
+		<action name="RenderStockReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="renderStockReport">
+			<result name="error">stockReport.jsp</result>
+			<result name="success">stockReport.jsp</result>
+		</action>
+
+		<action name="GenerateStockReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="generateStockReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">stockReport.jsp</result>
+			<result name="input">stockReport.jsp</result>
+		</action>
+
+		<action name="RenderSalesReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="renderSalesReport">
+			<result name="error">salesReport.jsp</result>
+			<result name="success">salesReport.jsp</result>
+		</action>
+
+		<action name="GenerateSalesReport"
+			class="com.edhanvantari.action.ReportAction"
+			method="generateSalesReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">salesReport.jsp</result>
+			<result name="input">salesReport.jsp</result>
+		</action>
+
+		<action name="SearchRemoveStock"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchRemoveStock">
+			<result name="success">removeStock.jsp</result>
+			<result name="error">removeStock.jsp</result>
+		</action>
+
+		<action name="SearchInactivePatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="searchInactivePatient">
+			<result name="success">activatePatient.jsp</result>
+			<result name="error">activatePatient.jsp</result>
+		</action>
+
+		<action name="RenderActivatePatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderActivatePatient">
+			<result name="success">activatePatient.jsp</result>
+			<result name="error">activatePatient.jsp</result>
+		</action>
+
+		<action name="ActivatePatient"
+			class="com.edhanvantari.action.PatientAction"
+			method="activatePatient">
+			<result name="success">activatePatient.jsp</result>
+		</action>
+
+		<action name="RenderViewInactivePatientList"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderViewInactivePatientList">
+			<result name="success">activatePatient.jsp</result>
+			<result name="error">activatePatient.jsp</result>
+		</action>
+
+		<action name="RetrieveStockDetails"
+			class="com.edhanvantari.action.ReportAction"
+			method="retrieveStockDetails">
+			<result name="success">stockList.jsp</result>
+			<result name="error">stockList.jsp</result>
+		</action>
+
+		<action name="RetrieveStockListByProductID"
+			class="com.edhanvantari.action.ReportAction"
+			method="retrieveStockListByProductID" />
+
+		<action name="DeleteProduct"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteProduct">
+			<result name="success">editProductList.jsp</result>
+			<result name="error">editProductList.jsp</result>
+		</action>
+
+		<action name="Render3CForm"
+			class="com.edhanvantari.action.ReportAction" method="render3CForm">
+			<result name="error">3CFormReport.jsp</result>
+			<result name="success">3CFormReport.jsp</result>
+		</action>
+
+		<action name="Generate3CForm"
+			class="com.edhanvantari.action.ReportAction" method="generate3CForm">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">3CFormReport.jsp</result>
+			<result name="input">3CFormReport.jsp</result>
+		</action>
+
+		<action name="RenderStockDetails"
+			class="com.edhanvantari.action.ReportAction"
+			method="renderStockDetails">
+			<result name="success">stockList.jsp</result>
+		</action>
+
+		<action name="RetrieveEmptyStockDetails"
+			class="com.edhanvantari.action.ReportAction"
+			method="retrieveEmptyStockDetails">
+			<result name="success">stockList.jsp</result>
+			<result name="error">stockList.jsp</result>
+		</action>
+
+		<action name="SerachDiagnosis"
+			class="com.edhanvantari.action.PatientAction"
+			method="serachDiagnosis" />
+			
+		<action name="UpdateMonthAppointment"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateMonthAppointment" />
+
+		<action name="LabReportView"
+			class="com.edhanvantari.action.PatientAction" method="labReportView" />
+
+		<action name="DownloadConsent"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadConsent">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="AddNewSurvey"
+			class="com.edhanvantari.action.PatientAction" method="addNewSurvey">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="DownloadSurvey"
+			class="com.edhanvantari.action.PatientAction" method="downloadSurvey">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="RenderAddNewSurvey"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderAddNewSurvey">
+			<result name="success">${pageName}</result>
+			<result name="error">surveyNew.jsp</result>
+		</action>
+
+		<action name="EditSurvey"
+			class="com.edhanvantari.action.PatientAction" method="editSurvey">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddConsent"
+			class="com.edhanvantari.action.PatientAction" method="addConsent" />
+
+		<action name="SearchRoomType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchRoomType">
+			<result name="success">manageRoomType.jsp</result>
+			<result name="error">manageRoomType.jsp</result>
+		</action>
+
+		<action name="ViewAllRoomTypes"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllRoomTypes">
+			<result name="success">manageRoomType.jsp</result>
+			<result name="error">manageRoomType.jsp</result>
+		</action>
+
+		<action name="AddRoomType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addRoomType">
+			<result name="success">manageRoomType.jsp</result>
+			<result name="error">manageRoomType.jsp</result>
+		</action>
+
+		<action name="RenderEditRoomType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditRoomType">
+			<result name="success">manageRoomType.jsp</result>
+		</action>
+
+		<action name="EditRoomType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editRoomType">
+			<result name="success">manageRoomType.jsp</result>
+			<result name="error">manageRoomType.jsp</result>
+		</action>
+
+		<action name="DeleteRoomType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteRoomType">
+			<result name="success">manageRoomType.jsp</result>
+			<result name="error">manageRoomType.jsp</result>
+		</action>
+
+		<action name="RenderIPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderIPDCharges">
+			<result name="success">manageIPDTarrifCharges.jsp</result>
+			<result name="error">manageIPDTarrifCharges.jsp</result>
+		</action>
+
+		<action name="SearchIPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchIPDCharges">
+			<result name="success">manageIPDTarrifCharges.jsp</result>
+			<result name="error">manageIPDTarrifCharges.jsp</result>
+		</action>
+
+		<action name="ViewAllIPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllIPDCharges">
+			<result name="success">manageIPDTarrifCharges.jsp</result>
+			<result name="error">manageIPDTarrifCharges.jsp</result>
+		</action>
+
+		<action name="AddIPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addIPDCharges">
+			<result name="success">manageIPDTarrifCharges.jsp</result>
+			<result name="error">manageIPDTarrifCharges.jsp</result>
+		</action>
+
+		<action name="RenderEditIPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditIPDCharges">
+			<result name="success">manageIPDTarrifCharges.jsp</result>
+		</action>
+
+		<action name="EditIPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editIPDCharges">
+			<result name="success">manageIPDTarrifCharges.jsp</result>
+			<result name="error">manageIPDTarrifCharges.jsp</result>
+		</action>
+
+		<action name="DeleteIPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteIPDCharges">
+			<result name="success">manageIPDTarrifCharges.jsp</result>
+			<result name="error">manageIPDTarrifCharges.jsp</result>
+		</action>
+
+		<action name="RenderIPDConsultantCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderIPDConsultantCharges">
+			<result name="success">manageIPDConsultantCharge.jsp</result>
+			<result name="error">manageIPDConsultantCharge.jsp</result>
+		</action>
+
+		<action name="SearchIPDConsultantCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchIPDConsultantCharges">
+			<result name="success">manageIPDConsultantCharge.jsp</result>
+			<result name="error">manageIPDConsultantCharge.jsp</result>
+		</action>
+
+		<action name="ViewAllIPDConsultantCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllIPDConsultantCharges">
+			<result name="success">manageIPDConsultantCharge.jsp</result>
+			<result name="error">manageIPDConsultantCharge.jsp</result>
+		</action>
+
+		<action name="AddIPDConsultantCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addIPDConsultantCharges">
+			<result name="success">manageIPDConsultantCharge.jsp</result>
+			<result name="error">manageIPDConsultantCharge.jsp</result>
+		</action>
+
+		<action name="RenderEditIPDConsultantCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditIPDConsultantCharges">
+			<result name="success">manageIPDConsultantCharge.jsp</result>
+		</action>
+
+		<action name="EditIPDConsultantCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editIPDConsultantCharges">
+			<result name="success">manageIPDConsultantCharge.jsp</result>
+			<result name="error">manageIPDConsultantCharge.jsp</result>
+		</action>
+
+		<action name="DeleteIPDConsultantCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteIPDConsultantCharges">
+			<result name="success">manageIPDConsultantCharge.jsp</result>
+			<result name="error">manageIPDConsultantCharge.jsp</result>
+		</action>
+
+		<action name="SearchTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="searchTest">
+			<result name="success">manageTest.jsp</result>
+			<result name="error">manageTest.jsp</result>
+		</action>
+
+		<action name="ViewAllTests"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllTests">
+			<result name="success">manageTest.jsp</result>
+			<result name="error">manageTest.jsp</result>
+		</action>
+
+		<action name="RenderEditTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditTest">
+			<result name="success">manageTest.jsp</result>
+			<result name="error">manageTest.jsp</result>
+		</action>
+
+		<action name="ConfigureTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="configureTest">
+			<result name="success">manageTest.jsp</result>
+			<result name="error">manageTest.jsp</result>
+		</action>
+
+		<action name="EditConfigureTests"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editConfigureTests">
+			<result name="success">manageTest.jsp</result>
+			<result name="error">manageTest.jsp</result>
+		</action>
+
+		<action name="SearchOPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchOPDCharges">
+			<result name="success">manageOPDCharges.jsp</result>
+			<result name="error">manageOPDCharges.jsp</result>
+		</action>
+
+		<action name="ViewAllOPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllOPDCharges">
+			<result name="success">manageOPDCharges.jsp</result>
+			<result name="error">manageOPDCharges.jsp</result>
+		</action>
+
+		<action name="AddOPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addOPDCharges">
+			<result name="success">manageOPDCharges.jsp</result>
+			<result name="error">manageOPDCharges.jsp</result>
+		</action>
+
+		<action name="AddOPDChargesAJAX"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addOPDChargesAJAX" />
+
+		<action name="AddIPDChargesAJAX"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addIPDTarrifChargesAJAX" />
+
+		<action name="RenderEditOPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditOPDCharges">
+			<result name="success">manageOPDCharges.jsp</result>
+		</action>
+
+		<action name="EditOPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editOPDCharges">
+			<result name="success">manageOPDCharges.jsp</result>
+			<result name="error">manageOPDCharges.jsp</result>
+		</action>
+
+		<action name="DeleteOPDCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteOPDCharges">
+			<result name="success">manageOPDCharges.jsp</result>
+			<result name="error">manageOPDCharges.jsp</result>
+		</action>
+
+		<action name="AddNewGeneralHospitalVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewGeneralHospitalVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewGeneralHospitalPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewGeneralHospitalPrescription">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintGeneralHospitalVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="printGeneralHospitalVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintGeneralHospitalPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="printGeneralHospitalPrescription">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewGeneralHospitalBill"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewGeneralHospitalBill">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PDFDownload"
+			class="com.edhanvantari.action.PatientAction" method="PDFDownload" />
+
+		<action name="ViewFiles"
+			class="com.edhanvantari.action.DownloadAction" method="ViewFiles">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+
+		<action name="GeneralHospitalLabReportView"
+			class="com.edhanvantari.action.PatientAction"
+			method="generalHospitalLabReportView" />
+
+		<action name="GeneralHospitalLabReportDownload"
+			class="com.edhanvantari.action.PatientAction"
+			method="generalHospitalLabReportDownload">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="AddBillDetails"
+			class="com.edhanvantari.action.PatientAction" method="addBillDetails" />
+
+		<action name="RetrieveTradeNameForPrescriptionBYProductID"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveTradeNameForPrescriptionBYProductID" />
+
+		<action name="DeleteGeneralHospitalPrescRow"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteGeneralHospitalPrescRow" />
+
+		<action name="DeleteBilling"
+			class="com.edhanvantari.action.PatientAction" method="deleteBilling" />
+
+		<action name="RetrievePrescriptionValues"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrievePrescriptionValues" />
+
+		<action name="RetrieveBillValues"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveBillValues" />
+
+		<action name="UpdateGeneralHospitalVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateGeneralHospitalVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintEditGeneralHospitalVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="printEditGeneralHospitalVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdateGeneralHospitalPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateGeneralHospitalPrescription">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditNewBill"
+			class="com.edhanvantari.action.PatientAction" method="editNewBill">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="RetrieveOTChargesDisbursementDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveOTChargesDisbursementDetails" />
+
+		<action name="AddNewGeneralHospitalIPDVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewGeneralHospitalIPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewIPDBill"
+			class="com.edhanvantari.action.PatientAction" method="addNewIPDBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="RetrieveIPDTarrifRate"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveIPDTarrifRate" />
+
+		<action name="RetrieveIPDConsultantRate"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveIPDConsultantRate" />
+
+		<action name="RetrieveIPDListsByRoomType"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveIPDListsByRoomType" />
+
+		<action name="EditGeneralHospitalIPDVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="editGeneralHospitalIPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditIPDBill"
+			class="com.edhanvantari.action.PatientAction" method="editIPDBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="DeleteIPDROw"
+			class="com.edhanvantari.action.PatientAction" method="deleteIPDROw" />
+
+		<action name="VerifyIPDVisitType"
+			class="com.edhanvantari.action.PatientAction"
+			method="verifyIPDVisitType" />
+
+		<action name="RetrieveIPDVisitTypeExceptNew"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveIPDVisitTypeExceptNew" />
+
+		<action name="RetrieveNonIPDVisitType"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveNonIPDVisitType" />
+
+		<action name="EditGeneralHospitalAddIPDVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="editGeneralHospitalAddIPDVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditGeneralHospitalAddIPDBill"
+			class="com.edhanvantari.action.PatientAction"
+			method="editGeneralHospitalAddIPDBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewGeneralClinicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewGeneralClinicVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditGeneralClinicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="editGeneralClinicVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdateGeneralClinicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateGeneralClinicVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewIPDGeneralClinicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewIPDGeneralClinicVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditIPDGeneralClinicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="editIPDGeneralClinicVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="UpdateIPDGeneralClinicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateIPDGeneralClinicVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintGeneralClinicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="printGeneralClinicVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintIPDGeneralClinicVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="printIPDGeneralClinicVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintGeneralClinicEditVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="printGeneralClinicEditVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="PrintIPDGeneralClinicEditVisit"
+			class="com.edhanvantari.action.PatientAction"
+			method="printIPDGeneralClinicEditVisit">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="input">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="VerifyProductNetStock"
+			class="com.edhanvantari.action.PatientAction"
+			method="verifyProductNetStock"></action>
+
+		<action name="DeletePrescriptionRowAdd"
+			class="com.edhanvantari.action.PatientAction"
+			method="deletePrescriptionRowAdd" />
+
+		<action name="SearchPatientNameList"
+			class="com.edhanvantari.action.PatientAction"
+			method="searchPatientNameList" />
+
+		<action name="AddSMSTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="addSMSTemplate">
+			<result name="success">SMSTemplate.jsp</result>
+			<result name="error">SMSTemplate.jsp</result>
+		</action>
+
+		<action name="EditSMSTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editSMSTemplate">
+			<result name="success">SMSTemplate.jsp</result>
+			<result name="error">SMSTemplate.jsp</result>
+		</action>
+
+		<action name="RenderEditSMSTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditSMSTemplate">
+			<result name="success">SMSTemplate.jsp</result>
+		</action>
+
+		<action name="SearchSMSTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="searchSMSTemplate">
+			<result name="success">SMSTemplate.jsp</result>
+			<result name="error">SMSTemplate.jsp</result>
+		</action>
+
+		<action name="ViewAllSMSTemplates"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllSMSTemplates">
+			<result name="success">SMSTemplate.jsp</result>
+			<result name="error">SMSTemplate.jsp</result>
+		</action>
+
+		<action name="DeleteSMSTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="deleteSMSTemplate">
+			<result name="success">SMSTemplate.jsp</result>
+			<result name="error">SMSTemplate.jsp</result>
+		</action>
+
+		<action name="DeleteLabReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteLabReport" />
+
+		<action name="RenderConfigureLabTest" class="com.edhanvantari.action.ConfigurationAction"
+			method="renderConfigureLabTest">
+			<result name="success">manageLabTests.jsp</result>
+		</action>
+
+		<action name="SearchLabTests"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="searchLabTests">
+			<result name="success">manageLabTests.jsp</result>
+			<result name="error">manageLabTests.jsp</result>
+		</action>
+
+		<action name="ViewAllLabTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllLabTest">
+			<result name="success">manageLabTests.jsp</result>
+			<result name="error">manageLabTests.jsp</result>
+		</action>
+
+		<action name="ConfigureLabTests"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="configureLabTests">
+			<result name="success">manageLabTests.jsp</result>
+			<result name="error">manageLabTests.jsp</result>
+		</action>
+
+		<action name="EditConfigureLabTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editConfigureLabTest">
+			<result name="success">manageLabTests.jsp</result>
+			<result name="error">manageLabTests.jsp</result>
+		</action>
+
+		<action name="RenderEditLabTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditLabTest">
+			<result name="success">manageLabTests.jsp</result>
+			<result name="error">manageLabTests.jsp</result>
+		</action>
+
+		<action name="DeleteLabTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="deleteLabTest">
+			<result name="success">manageLabTests.jsp</result>
+			<result name="error">manageLabTests.jsp</result>
+		</action>
+
+		<action name="AddNewLabVisit"
+			class="com.edhanvantari.action.PatientAction" method="addNewLabVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddNewLabBill"
+			class="com.edhanvantari.action.PatientAction" method="addNewLabBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="AddReferringDoctor" method="addReferringDoctor"
+			class="com.edhanvantari.action.ConfigurationAction" />
+
+		<action name="RetrieveReferringDoctorList"
+			method="retrieveReferringDoctorList"
+			class="com.edhanvantari.action.ConfigurationAction" />
+
+		<action name="EditLabVisit"
+			class="com.edhanvantari.action.PatientAction" method="editLabVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EditBDPVisit"
+			class="com.edhanvantari.action.PatientAction" method="editBDPVisit">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="EmailLabTestReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="emailLabTestReport">
+			<result name="success">mhatreLabOPDEdit.jsp</result>
+			<result name="error">mhatreLabOPDEdit.jsp</result>
+		</action>
+
+		<action name="DownloadLabTestReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadLabTestReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">viewExistingVisitList.jsp</result>
+		</action>
+
+		<action name="DownloadBDPLabTestReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadBDPLabTestReport">
+			<result name="success" type="stream">
+				<param name="contentDisposition">attachment;filename=${fileName}</param>
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">fileInputStream</param>
+				<param name="bufferSize">4096</param>
+			</result>
+			<result name="error">viewExistingVisitList.jsp</result>
+		</action>
+
+		<action name="RetrieveLabTestByVisitID"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveLabTestByVisitID" />
+
+		<action name="RetrieveLabBillDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveLabBillDetails" />
+
+		<action name="VerifyBillDuePending"
+			class="com.edhanvantari.action.PatientAction"
+			method="verifyBillDuePending" />
+
+		<action name="PrintLabBill"
+			class="com.edhanvantari.action.PatientAction" method="printLabBill">
+			<result name="success" type="redirectAction">
+				<param name="actionName">RenderViewVisit</param>
+				<param name="patientID">${patientID}</param>
+				<param name="visitID">${visitID}</param>
+				<param name="visitTypeID">${visitTypeID}</param>
+			</result>
+			<result name="error"> viewExistingVisitList.jsp </result>
+		</action>
+
+		<action name="SearchLabTestNameList"
+			class="com.edhanvantari.action.PatientAction"
+			method="searchLabTestNameList" />
+
+		<action name="RetrieveGroupValues"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveGroupValues" />
+
+		<action name="EditDueLabBill"
+			class="com.edhanvantari.action.PatientAction" method="editDueLabBill">
+			<result name="success">viewExistingVisitList.jsp</result>
+			<result name="error">viewExistingVisitList.jsp</result>
+		</action>
+
+		<action name="EditLabBill"
+			class="com.edhanvantari.action.PatientAction" method="editLabBill">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="RetrieveLabDefaultValueList"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveLabDefaultValueList" />
+
+		<action name="RemoveLabInvestigationTest"
+			class="com.edhanvantari.action.PatientAction"
+			method="removeLabInvestigationTest" />
+
+		<action name="VerifyUsernameExists"
+			class="com.edhanvantari.action.RegistrationAction"
+			method="verifyUsername" />
+
+		<action name="AddTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="addTemplate">
+			<result name="success">addTemplate.jsp</result>
+			<result name="error">addTemplate.jsp</result>
+		</action>
+
+		<action name="RenderEditTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditTemplate">
+			<result name="success">editTemplate.jsp</result>
+		</action>
+
+		<action name="EditTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="editTemplate">
+			<result name="success">editTemplate.jsp</result>
+			<result name="error">editTemplate.jsp</result>
+		</action>
+
+
+		<action name="SearchTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="searchTemplate">
+			<result name="success">viewTemplate.jsp</result>
+			<result name="error">viewTemplate.jsp</result>
+		</action>
+
+		<action name="ViewAllTemplates"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllTemplates">
+			<result name="success">viewTemplate.jsp</result>
+			<result name="error">viewTemplate.jsp</result>
+		</action>
+
+		<action name="DeleteTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="deleteTemplate">
+			<result name="success">viewTemplate.jsp</result>
+			<result name="error">viewTemplate.jsp</result>
+		</action>
+
+		<action name="RetrieveTemplate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="retrieveTemplate">
+		</action>
+
+		<action name="RetrieveClinicianMedRegNo"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveClinicianMedRegNo">
+		</action>
+
+		<action name="SendOTP"
+			class="com.edhanvantari.action.PatientAction" method="sendOTP">
+		</action>
+
+		<action name="ValidateOTP"
+			class="com.edhanvantari.action.PatientAction" method="validateOTP">
+		</action>
+
+		<action name="UpdateCalendarFilter"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateCalendarFilter">
+			<result name="success">Welcome.jsp</result>
+		</action>
+
+		<action name="AddReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="addBDPReportData">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="editBDPReport"
+			class="com.edhanvantari.action.PatientAction" method="editBDPReport">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+
+		<action name="downloadBlankPrescription"
+			class="com.edhanvantari.action.PatientAction"
+			method="downloadBlankPrescription" />
+
+		<action name="getDetailsPCPNDT"
+			class="com.edhanvantari.action.PatientAction"
+			method="getDetailsPCPNDT" />
+
+		<action name="addnewUSGReport"
+			class="com.edhanvantari.action.PatientAction"
+			method="addnewUSGReport">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+		</action>
+		
+		<action name="PrintFormF" class="com.edhanvantari.action.PatientAction" method="printFormF" />
+
+		<action name="RenderLabTestQuotation"
+			class="com.edhanvantari.action.PatientAction"
+			method="renderLabTestQuotation">
+			<result name="success">labTestQuotation.jsp</result>
+			<result name="error">labTestQuotation.jsp</result>
+		</action>
+
+		<action name="getUpdatedRefDoc"
+			class="com.edhanvantari.action.PatientAction"
+			method="getUpdatedRefDoc">
+		</action>
+
+		<action name="RenderGroupLabTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderGroupLabTest">
+			<result name="success">manageGroupTests.jsp</result>
+		</action>
+
+		<action name="ConfigureGroupTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="configureGroupTest">
+			<result name="success">manageGroupTests.jsp</result>
+		</action>
+
+		<action name="viewAllGroupTests"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllGroupTests">
+			<result name="success">manageGroupTests.jsp</result>
+			<result name="error">manageGroupTests.jsp</result>
+		</action>
+
+		<action name="RenderEditGroupTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditGroupTest">
+			<result name="success">manageGroupTests.jsp</result>
+			<result name="error">manageGroupTests.jsp</result>
+		</action>
+
+		<action name="SearchGroupTest"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="SearchGroupTest">
+			<result name="success">manageGroupTests.jsp</result>
+			<result name="error">manageGroupTests.jsp</result>
+		</action>
+
+		<action name="RenderLabTestsRate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="RenderLabTestsRate">
+			<result name="success">manageLabTestsRate.jsp</result>
+		</action>
+
+		<action name="ConfigureTestRate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="ConfigureTestRate">
+			<result name="success">manageLabTestsRate.jsp</result>
+		</action>
+
+		<action name="SearchLabTestRate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="SearchLabTestRate">
+			<result name="success">manageLabTestsRate.jsp</result>
+		</action>
+
+		<action name="viewAllLabTests"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="viewAllLabTests">
+			<result name="success">manageLabTestsRate.jsp</result>
+			<result name="error">manageLabTestsRate.jsp</result>
+		</action>
+
+		<action name="renderEditLabTestRate"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="renderEditLabTestRate">
+			<result name="success">manageLabTestsRate.jsp</result>
+			<result name="error">manageLabTestsRate.jsp</result>
+		</action>
+
+		<action name="updatePCPNDTStatus"
+			class="com.edhanvantari.action.PatientAction"
+			method="updatePCPNDTStatus" />
+
+		<action name="EditConfigureLabTestCharges"
+			class="com.edhanvantari.action.ConfigurationAction"
+			method="EditConfigureLabTestCharges">
+			<result name="success">manageLabTestsRate.jsp</result>
+		</action>
+
+		<action name="SearchOTType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchOTType">
+			<result name="success">manageOTTypes.jsp</result>
+			<result name="error">manageOTTypes.jsp</result>
+		</action>
+
+		<action name="ViewAllOTTypes"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllOTTypes">
+			<result name="success">manageOTTypes.jsp</result>
+			<result name="error">manageOTTypes.jsp</result>
+		</action>
+
+		<action name="AddOTType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addOTType">
+			<result name="success">manageOTTypes.jsp</result>
+			<result name="error">manageOTTypes.jsp</result>
+		</action>
+
+		<action name="RenderEditOTType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditOTType">
+			<result name="success">manageOTTypes.jsp</result>
+		</action>
+
+		<action name="EditOTType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editOTType">
+			<result name="success">manageOTTypes.jsp</result>
+			<result name="error">manageOTTypes.jsp</result>
+		</action>
+
+		<action name="DeleteOTType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteOTType">
+			<result name="success">manageOTTypes.jsp</result>
+			<result name="error">manageOTTypes.jsp</result>
+		</action>
+
+		<action name="SearchServiceType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchServiceType">
+			<result name="success">manageServiceTypes.jsp</result>
+			<result name="error">manageServiceTypes.jsp</result>
+		</action>
+
+		<action name="ViewAllServiceTypes"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllServiceTypes">
+			<result name="success">manageServiceTypes.jsp</result>
+			<result name="error">manageServiceTypes.jsp</result>
+		</action>
+
+		<action name="AddServiceType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addServiceType">
+			<result name="success">manageServiceTypes.jsp</result>
+			<result name="error">manageServiceTypes.jsp</result>
+		</action>
+
+		<action name="RenderEditServiceType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditServiceType">
+			<result name="success">manageServiceTypes.jsp</result>
+		</action>
+
+		<action name="EditServiceType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editServiceType">
+			<result name="success">manageServiceTypes.jsp</result>
+			<result name="error">manageServiceTypes.jsp</result>
+		</action>
+
+		<action name="DeleteServiceType"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteServiceType">
+			<result name="success">manageServiceTypes.jsp</result>
+			<result name="error">manageServiceTypes.jsp</result>
+		</action>
+
+		<action name="RenderRoomCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderRoomCharges">
+			<result name="success">manageRoomCharge.jsp</result>
+			<result name="error">manageRoomCharge.jsp</result>
+		</action>
+
+		<action name="SearchRoomCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="searchRoomCharges">
+			<result name="success">manageRoomCharge.jsp</result>
+			<result name="error">manageRoomCharge.jsp</result>
+		</action>
+
+		<action name="ViewAllRoomCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="viewAllRoomCharges">
+			<result name="success">manageRoomCharge.jsp</result>
+			<result name="error">manageRoomCharge.jsp</result>
+		</action>
+
+		<action name="AddRoomCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="addRoomCharges">
+			<result name="success">manageRoomCharge.jsp</result>
+			<result name="error">manageRoomCharge.jsp</result>
+		</action>
+
+		<action name="RenderEditRoomCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="renderEditRoomCharges">
+			<result name="success">manageRoomCharge.jsp</result>
+		</action>
+
+		<action name="EditRoomCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="editRoomCharges">
+			<result name="success">manageRoomCharge.jsp</result>
+			<result name="error">manageRoomCharge.jsp</result>
+		</action>
+
+		<action name="DeleteRoomCharges"
+			class="com.edhanvantari.action.PrescriptionManagementAction"
+			method="deleteRoomCharges">
+			<result name="success">manageRoomCharge.jsp</result>
+			<result name="error">manageRoomCharge.jsp</result>
+		</action>
+
+		<action name="RetrieveRoomTypeForBooking"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveRoomTypeForBooking" />
+
+		<action name="AddNewAppointmentForBooking"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewAppointment">
+			<result name="success">Welcome.jsp</result>
+			<result name="error">addNewFacilityAppointment.jsp</result>
+			<result name="input">addNewFacilityAppointment.jsp</result>
+		</action>
+
+		<action name="DeleteReceiptItemByID"
+			class="com.edhanvantari.action.PatientAction"
+			method="deleteReceiptItemByID" />
+
+		<action name="AddNewIPDVisitWithoutPrint"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewIPDVisitWithoutPrint">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="UpdateIPDVisitWithoutPrint"
+			class="com.edhanvantari.action.PatientAction"
+			method="updateIPDVisitWithoutPrint">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="AddNewIPDVisitWithoutPrint"
+			class="com.edhanvantari.action.PatientAction"
+			method="addNewIPDVisitWithoutPrint">
+			<result name="success">${pageName}</result>
+			<result name="error">${pageName}</result>
+			<result name="input">${pageName}</result>
+		</action>
+
+		<action name="FetchPharmaBill"
+			class="com.edhanvantari.action.PatientAction"
+			method="fetchPharmaBill" />
+
+		<action name="PatientIntake" class="">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>patientIntake.jsp</result>
+		</action>
+
+		<action name="SearchPECTradeNameList"
+			class="com.edhanvantari.action.PatientAction"
+			method="searchPECTradeNameList" />
+
+		<action name="GetAppointmentSlots"
+			class="com.edhanvantari.action.PatientAction"
+			method="getAppointmentSlots" />
+
+		<action name="SavePharmacyBill"
+			class="com.edhanvantari.action.PatientAction" method="addNewBill">
+			<result name="success">pharmacist.jsp</result>
+			<result name="error">pharmacist.jsp</result>
+		</action>
+
+		<action name="RetrieveVisitLastEditHistoryDetails"
+			class="com.edhanvantari.action.PatientAction"
+			method="retrieveVisitLastEditHistoryDetails" />
+
+	</package>
+
+	<package name="custom" extends="struts-default"
+		namespace="/custom">
+		<action name="VerifyPatientIntakeDetails"
+			class="com.edhanvantari.action.LoginAction"
+			method="verifyPatientIntakeDetails" />
+
+		<action name="RedirectPatientIntakeDetails"
+			class="com.edhanvantari.action.LoginAction"
+			method="redirectPatientIntakeDetails" />
+
+		<action name="AddNewPatientIntakeAppointment"
+			class="com.edhanvantari.action.LoginAction"
+			method="addNewPatientIntakeAppointment" />
+
+		<action name="AddPatientIntakeAppointment"
+			class="com.edhanvantari.action.LoginAction"
+			method="addPatientIntakeAppointment" />
+
+		<action name="GetPIAppointmentType"
+			class="com.edhanvantari.action.LoginAction"
+			method="getPIAppointmentType" />
+
+		<action name="GetPIAppointmentSlots"
+			class="com.edhanvantari.action.LoginAction"
+			method="getPIAppointmentSlots" />
+
+		<action name="SendOTPForVerification"
+			class="com.edhanvantari.action.LoginAction"
+			method="sendOTPForVerification" />
+
+		<action name="ValidateOTPForPatientIntake"
+			class="com.edhanvantari.action.LoginAction"
+			method="validateOTPForPatientIntake" />
+			
+		<action name="UpdatePatientDetails"
+			class="com.edhanvantari.action.LoginAction"
+			method="updatePatientDetails" />
+			
+		<action name="UpdateAppoitmentDetails"
+			class="com.edhanvantari.action.LoginAction"
+			method="updateAppoitmentDetails" />
+			
+	</package>
+
+</struts>

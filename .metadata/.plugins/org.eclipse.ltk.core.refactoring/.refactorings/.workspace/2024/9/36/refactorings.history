@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;eDhanvantari/src/main/webapp/WEB-INF/lib/struts2-rest-plugin-6.6.0.jar&apos;" deleteContents="false" description="Delete resource &apos;eDhanvantari/src/main/webapp/WEB-INF/lib/struts2-rest-plugin-6.6.0.jar&apos;" element1="/eDhanvantari/src/main/webapp/WEB-INF/lib/struts2-rest-plugin-6.6.0.jar" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1725537542972"/>
+</session>

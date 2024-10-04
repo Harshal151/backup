@@ -1,0 +1,22 @@
+[
+	{
+		"chargeType": "X-Rays 8x10 No.",
+		"rate": "500"
+	},
+	{
+		"chargeType": "Plaster",
+		"rate": "400"
+	},
+	{
+		"chargeType": "Dressing",
+		"rate": "200"
+	},
+	{
+		"chargeType": "Injections",
+		"rate": "100"
+	},
+	{
+		"chargeType": "Other",
+		"rate": "100"
+	}
+]

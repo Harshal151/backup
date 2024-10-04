@@ -1,0 +1,49 @@
+<Practice name="Rasayu Clinics">
+	<Clinic name="Rasayu Cancer Clinic">
+		<Table name="Patient AS pt">
+			<Table name="Appointment AS apt" key="patientID" parent="Patient AS pt">
+				<PTable name="Clinic AS cln" fkey="clinicID" parent="Appointment AS apt" cname="name"/>
+				<PTable name="AppUser AS apu" fkey="clinicianID" parent="Appointment AS apt" cname="username"/>
+		    </Table>
+			<Table name="ClinicRegistration AS cg" key="patientID" parent="Patient AS pt"/>
+			<Table name="EmergencyContact AS ec" key="patientID" parent="Patient AS pt"/>
+			<Table name="Identification AS idf" key="patientID" parent="Patient AS pt"/>
+			<Table name="MedicalHistory AS mh" key="patientID" parent="Patient AS pt"/>
+			<Table name="FamilyHistory AS fh" key="patientID" parent="Patient AS pt"/>
+			<Table name="PersonalHistory AS ph" key="patientID" parent="Patient AS pt"/>
+			<Table name="PrescriptionHistory AS prh" key="patientID" parent="Patient AS pt"/>
+			<Table name="ReferredBy AS rb" key="patientID" parent="Patient AS pt"/>
+			<Table name="Visit AS vt" key="patientID" parent="Patient AS pt">
+				<PTable name="PVVisitType AS pvt" fkey="visitTypeID" parent="Visit AS vt" cname="name"/>
+				**<Table name="IPDContinuationSheet AS ic" key="visitID" parent="Visit AS vt"/>
+				**<Table name="OphthalmologyIPD AS oi" key="visitID" parent="Visit AS vt"/>
+				**<Table name="OphthalmologyOPD AS oo" key="visitID" parent="Visit AS vt"/>
+				**<Table name="OpthalmologyComplaints AS oc" key="visitID" parent="Visit AS vt"/>
+				**<Table name="Optometry AS op" key="visitID" parent="Visit AS vt"/>
+				**<Table name="PrescribedInvestigations AS pi" key="visitID" parent="Visit AS vt"/>
+				**<Table name="PresentComplaints AS pc" key="visitID" parent="Visit AS vt"/>
+				<Table name="Consent AS cn" key="visitID" parent="Visit AS vt"/>				
+				<Table name="Investigations AS iv" key="visitID" parent="Visit AS vt"/>
+				<Table name="LabInvestigations AS li" key="visitID" parent="Visit AS vt"/>
+				<Table name="MedicalDocuments AS md" key="visitID" parent="Visit AS vt"/>
+				<Table name="OnExamination AS oe" key="visitID" parent="Visit AS vt"/>
+				<Table name="Prescription AS pr" key="visitID" parent="Visit AS vt">
+					<PTable name="Product AS prd" fkey="productID" parent="Prescription AS pr" cname="tradeName"/>
+					<!--<Table name="Transactions AS tr" key="prescriptiondID" parent="Prescription AS pr">
+						<PTable name="Receipts AS rcp" fkey="receiptID"  parent="Prescription AS pr" cname="receiptNo"/>
+					</Table>-->
+				</Table>
+				<Table name="Receipt AS rcp" key="visitID" parent="Visit AS vt">
+					 <PTable name="AppUser AS apu" fkey="userID" parent="Receipt AS rcp" cname="username"/>
+					 <Table name="Transactions AS tr" key="receiptID" parent="Receipt AS rcp">
+                     <PTable name="Product AS prd" fkey="productID" parent="Transactions AS tr" cname="tradeName"/>
+                </Table>
+				<Table name="PaymentDetails AS pd" key="receiptID" parent="Receipt AS rcp"/>
+				</Table>
+				<Table name="Reports AS rpt" key="visitID" parent="Visit AS vt"/>
+				<Table name="SymptomCheck AS sc" key="visitID" parent="Visit AS vt"/>
+				<Table name="VitalSigns AS vs" key="visitID" parent="Visit AS vt"/>
+			</Table>
+		</Table>
+	</Clinic>
+</Practice>
